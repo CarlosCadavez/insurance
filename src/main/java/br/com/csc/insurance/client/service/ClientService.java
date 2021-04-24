@@ -34,6 +34,10 @@ public class ClientService {
         return buildClient(client);
     }
 
+    public void delete(String clientId) {
+        clientRepository.delete(Client.builder().id(clientId).build());
+    }
+
     private Client convertToSave(ClientDTO clientDTO) {
         return new ModelMapper().map(clientDTO, Client.class);
     }

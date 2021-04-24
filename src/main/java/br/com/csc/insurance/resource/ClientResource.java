@@ -30,4 +30,10 @@ public class ClientResource {
         return clientService.addClient(clientDTO);
     }
 
+    @DeleteMapping("/{clientId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteClient(@PathVariable String clientId) {
+        clientService.delete(clientId);
+    }
+
 }
