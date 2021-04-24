@@ -1,10 +1,12 @@
 package br.com.csc.insurance.policy.service;
 
 import br.com.csc.insurance.client.entity.Client;
+import br.com.csc.insurance.client.exception.ClientNotFoundException;
 import br.com.csc.insurance.client.repository.ClientRepository;
 import br.com.csc.insurance.policy.dto.PolicyDTO;
 import br.com.csc.insurance.policy.dto.PolicyResponseDTO;
 import br.com.csc.insurance.policy.entity.Policy;
+import br.com.csc.insurance.policy.exception.PolicyNotFoundException;
 import br.com.csc.insurance.policy.repository.PolicyRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,12 +32,16 @@ public class PolicyService {
     }
 
     public PolicyResponseDTO addPolicy(PolicyDTO policyDTO) {
-        Optional<Client> client = clientRepository.findById(policyDTO.getClientId());
-        //TODO: tratar not found
+        Optional<Client> client = Optional.ofNullable(clientRepository.findById(policyDTO.getClientId()).orElseThrow(ClientNotFoundException::new));
         Policy policyToSave = convertToSave(policyDTO);
         policyToSave.setClient(client.get());
         Policy policy = policyRepository.save(policyToSave);
         return buildPolicy(policy);
+    }
+
+    public void delete(String policyNumber) {
+        Optional.ofNullable(policyRepository.findByPolicyNumber(policyNumber).orElseThrow(PolicyNotFoundException::new));
+        policyRepository.deleteByPolicyNumber(policyNumber);
     }
 
     private PolicyResponseDTO buildPolicy(Policy policy) {
@@ -62,4 +68,5 @@ public class PolicyService {
                 .amount(policyDTO.getAmount())
                 .build();
     }
+
 }

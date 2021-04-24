@@ -25,7 +25,6 @@ public class Policy {
     private String policyNumber;
     private LocalDate startPolicyPeriod;
     private LocalDate endPolicyPeriod;
-    @DBRef(lazy = true)
     private Client client;
     private String licensePlate;
     private BigDecimal amount;

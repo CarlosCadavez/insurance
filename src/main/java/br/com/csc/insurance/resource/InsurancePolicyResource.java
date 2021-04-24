@@ -29,4 +29,10 @@ public class InsurancePolicyResource {
         return policyService.addPolicy(policyDTO);
     }
 
+    @DeleteMapping("/{policyNumber}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePolicy(@PathVariable String policyNumber) {
+        policyService.delete(policyNumber);
+    }
+
 }
