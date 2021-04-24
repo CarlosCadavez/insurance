@@ -5,9 +5,11 @@ import br.com.csc.insurance.client.dto.ClientResponseDTO;
 import br.com.csc.insurance.client.entity.Client;
 import br.com.csc.insurance.client.exception.ClientAlreadyExistsException;
 import br.com.csc.insurance.client.exception.ClientNotFoundException;
+import br.com.csc.insurance.client.exception.ElementAssociatedException;
 import br.com.csc.insurance.client.repository.ClientRepository;
 import br.com.csc.insurance.client.validator.ClientValidator;
-import br.com.csc.insurance.exception.EntityNotFoundException;
+import br.com.csc.insurance.policy.entity.Policy;
+import br.com.csc.insurance.policy.repository.PolicyRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -20,8 +22,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ClientService {
 
+    private static final String ELEMENT_ASSOCIATED_EXCEPTION_MESSAGE = "Has policy(s) associated. Client can not be deleted";
+
     private final ClientValidator validator;
     private final ClientRepository clientRepository;
+    private final PolicyRepository policyRepository;
 
     public List<ClientResponseDTO> clients() {
         return clientRepository
@@ -38,6 +43,11 @@ public class ClientService {
     }
 
     public void delete(String clientId) {
+        Optional<Client> client = Optional.ofNullable(clientRepository.findById(clientId).orElseThrow(ClientNotFoundException::new));
+        List<Policy> policies = policyRepository.findByClient(client.get());
+        if (!policies.isEmpty()) {
+            throw new ElementAssociatedException(ELEMENT_ASSOCIATED_EXCEPTION_MESSAGE);
+        }
         clientRepository.delete(Client.builder().id(clientId).build());
     }
 

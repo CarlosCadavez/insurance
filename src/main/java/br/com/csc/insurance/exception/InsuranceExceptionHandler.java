@@ -1,5 +1,6 @@
 package br.com.csc.insurance.exception;
 
+import br.com.csc.insurance.client.exception.ElementAssociatedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,15 @@ public class InsuranceExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(EntityExistsException.class)
-    public ResponseEntity<Object> handleNotFoundException(EntityExistsException exception) {
+    public ResponseEntity<Object> handleEntityExistsException(EntityExistsException exception) {
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage(),
+                Collections.singletonList(exception.getMessage()));
+    }
+
+    @ExceptionHandler(ElementAssociatedException.class)
+    public ResponseEntity<Object> handleElementAssociatedExceçtion(ElementAssociatedException exception) {
         return buildErrorResponse(
                 HttpStatus.BAD_REQUEST,
                 exception.getMessage(),

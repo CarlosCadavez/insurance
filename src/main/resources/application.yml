@@ -1,4 +1,4 @@
 spring:
   data:
     mongodb:
-      uri:
+      uri: mongodb+srv://insurance_api:x21raOmKZytfq5zU@insurance.ei1lz.mongodb.net/insurance
