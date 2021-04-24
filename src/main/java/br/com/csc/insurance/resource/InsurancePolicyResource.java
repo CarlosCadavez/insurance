@@ -15,7 +15,6 @@ import java.util.List;
 @RequestMapping("/api/v1/policies")
 public class InsurancePolicyResource {
 
-
     private final PolicyService policyService;
 
     @GetMapping
@@ -23,10 +22,21 @@ public class InsurancePolicyResource {
         return policyService.policies();
     }
 
+    @GetMapping("/{policyNumber}")
+    public PolicyResponseDTO policieByNumber(@PathVariable String policyNumber) {
+        return policyService.policyByNumber(policyNumber);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PolicyResponseDTO addPolicy(@Valid @RequestBody PolicyDTO policyDTO) {
         return policyService.addPolicy(policyDTO);
+    }
+
+    @PutMapping("/{policyNumber}")
+    @ResponseStatus(HttpStatus.OK)
+    public PolicyResponseDTO updatePolicy(@PathVariable String policyNumber, @Valid  @RequestBody PolicyDTO policyDTO) {
+        return policyService.update(policyNumber, policyDTO);
     }
 
     @DeleteMapping("/{policyNumber}")

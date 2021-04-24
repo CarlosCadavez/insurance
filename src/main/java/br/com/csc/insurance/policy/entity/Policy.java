@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -21,11 +22,16 @@ import java.time.LocalDate;
 public class Policy {
 
     @Id
-    private String Id;
+    private String id;
+    @Field("policy_number")
     private String policyNumber;
+    @Field("start_policy_period")
     private LocalDate startPolicyPeriod;
+    @Field("end_policy_period")
     private LocalDate endPolicyPeriod;
+    @DBRef(lazy = true)
     private Client client;
+    @Field("license_plate")
     private String licensePlate;
     private BigDecimal amount;
 

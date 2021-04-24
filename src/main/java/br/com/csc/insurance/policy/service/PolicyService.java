@@ -39,9 +39,24 @@ public class PolicyService {
         return buildPolicy(policy);
     }
 
+    public PolicyResponseDTO update(String policyNumber, PolicyDTO policyDTO) {
+        Optional<Client> client = Optional.ofNullable(clientRepository.findById(policyDTO.getClientId()).orElseThrow(ClientNotFoundException::new));
+        Optional<Policy> policySaved = Optional.ofNullable(policyRepository.findByPolicyNumber(policyNumber).orElseThrow(PolicyNotFoundException::new));
+        Policy policyToSave = convertToSave(policyDTO);
+        policyToSave.setPolicyNumber(policySaved.get().getPolicyNumber());
+        policyToSave.setId(policySaved.get().getId());
+        policyToSave.setClient(client.get());
+        return buildPolicy(policyRepository.save(policyToSave));
+    }
+
     public void delete(String policyNumber) {
         Optional.ofNullable(policyRepository.findByPolicyNumber(policyNumber).orElseThrow(PolicyNotFoundException::new));
         policyRepository.deleteByPolicyNumber(policyNumber);
+    }
+
+    public PolicyResponseDTO policyByNumber(String policyNumber) {
+        Optional<Policy> policy = Optional.ofNullable(policyRepository.findByPolicyNumber(policyNumber).orElseThrow(PolicyNotFoundException::new));
+        return buildPolicy(policy.get());
     }
 
     private PolicyResponseDTO buildPolicy(Policy policy) {
