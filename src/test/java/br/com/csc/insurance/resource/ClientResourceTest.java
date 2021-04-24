@@ -1,9 +1,9 @@
 package br.com.csc.insurance.resource;
 
+import br.com.csc.insurance.client.dto.ClientDTO;
 import br.com.csc.insurance.client.dto.ClientResponseDTO;
 import br.com.csc.insurance.client.service.ClientService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import br.com.csc.insurance.resource.helper.ConvertJson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +28,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ClientResourceTest {
 
     private static final String CLIENTS_URI = "/api/v1/clients";
+    private static final String AN_NAME = "Name to test";
+    private static final String A_CITY = "City to test";
+    private static final String A_CPF = "61106143000";
+    private static final String A_FEDERATION_UNIT = "SC";
 
     @Mock
     private ClientService clientService;
@@ -36,9 +40,11 @@ class ClientResourceTest {
     private ClientResource clientResource;
 
     private MockMvc mockMvc;
+    private ConvertJson convertJson;
 
     @BeforeEach
     void setUp() {
+        this.convertJson = new ConvertJson();
         this.mockMvc = MockMvcBuilders.standaloneSetup(clientResource)
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .setViewResolvers((s, locale) ->  new MappingJackson2JsonView())
@@ -51,11 +57,29 @@ class ClientResourceTest {
         mockMvc.perform(MockMvcRequestBuilders.get(CLIENTS_URI)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(listAsJsonString(buildAListOfClients())));
+                .andExpect(content().json(convertJson.clientResponseDtoListAsJsonString(buildAListOfClients())));
     }
 
-    private String listAsJsonString(List<ClientResponseDTO> clients) throws JsonProcessingException {
-        return new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(clients);
+    @Test
+    void should_create_user_and_return_status_code_created() throws Exception {
+        ClientDTO clientDTO = ClientDTO.builder()
+                .cpf(A_CPF)
+                .federationUnity(A_FEDERATION_UNIT)
+                .city(A_CITY)
+                .name(AN_NAME)
+                .build();
+        ClientResponseDTO clientResponseDTO = ClientResponseDTO.builder()
+                .cpf(A_CPF)
+                .federationUnity(A_FEDERATION_UNIT)
+                .city(A_CITY)
+                .name(AN_NAME)
+                .build();
+        when(clientService.addClient(clientDTO)).thenReturn(clientResponseDTO);
+        mockMvc.perform(MockMvcRequestBuilders.post(CLIENTS_URI)
+                .contentType(APPLICATION_JSON)
+                .content(convertJson.clientDtoAsJsonString(clientDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(convertJson.clientResponseDtoAsJsonString(clientResponseDTO)));
     }
 
     private List<ClientResponseDTO> buildAListOfClients() {
