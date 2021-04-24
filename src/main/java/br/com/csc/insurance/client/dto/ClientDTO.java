@@ -25,7 +25,6 @@ public class ClientDTO {
     @NotNull
     @Size(min = 2, max = 2)
     private String federationUnity;
-    private String id;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class JacksonBuilder {

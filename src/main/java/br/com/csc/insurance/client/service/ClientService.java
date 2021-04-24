@@ -4,6 +4,7 @@ import br.com.csc.insurance.client.dto.ClientDTO;
 import br.com.csc.insurance.client.dto.ClientResponseDTO;
 import br.com.csc.insurance.client.entity.Client;
 import br.com.csc.insurance.client.exception.ClientAlreadyExistsException;
+import br.com.csc.insurance.client.exception.ClientNotFound;
 import br.com.csc.insurance.client.repository.ClientRepository;
 import br.com.csc.insurance.client.validator.ClientValidator;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +26,7 @@ public class ClientService {
         return clientRepository
                 .findAll()
                 .stream()
-                .map(client -> buildClient(client))
+                .map(this::buildClient)
                 .collect(Collectors.toList());
     }
 
@@ -50,5 +52,12 @@ public class ClientService {
                 .federationUnity(client.getFederationUnity())
                 .id(client.getId())
                 .build();
+    }
+
+    public ClientResponseDTO update(String clientId, ClientDTO clientDTO) {
+        Optional.ofNullable(clientRepository.findById(clientId).orElseThrow(ClientNotFound::new));
+        Client clientToSave = convertToSave(clientDTO);
+        clientToSave.setId(clientId);
+        return buildClient(clientRepository.save(clientToSave));
     }
 }
