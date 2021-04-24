@@ -72,6 +72,28 @@ class ClientResourceTest {
     }
 
     @Test
+    void should_update_user_and_return_status_code_ok() throws Exception {
+        ClientDTO clientDTO = ClientDTO.builder()
+                .cpf(A_CPF)
+                .federationUnity(A_FEDERATION_UNIT)
+                .city(A_CITY)
+                .name(AN_NAME)
+                .build();
+        ClientResponseDTO clientResponseDTO = ClientResponseDTO.builder()
+                .cpf(A_CPF)
+                .federationUnity(A_FEDERATION_UNIT)
+                .city(A_CITY)
+                .name(AN_NAME)
+                .build();
+        when(clientService.update(A_CLIENT_ID, clientDTO)).thenReturn(clientResponseDTO);
+        mockMvc.perform(MockMvcRequestBuilders.put(CLIENTS_URI + "/" + A_CLIENT_ID)
+                .contentType(APPLICATION_JSON)
+                .content(convertJson.clientDtoAsJsonString(clientDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(convertJson.clientResponseDtoAsJsonString(clientResponseDTO)));
+    }
+
+    @Test
     void should_create_user_and_return_status_code_created() throws Exception {
         ClientDTO clientDTO = ClientDTO.builder()
                 .cpf(A_CPF)

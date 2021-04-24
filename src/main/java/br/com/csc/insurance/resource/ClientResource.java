@@ -31,13 +31,13 @@ public class ClientResource {
     }
 
     @PutMapping("/{clientId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public ClientResponseDTO updateClient(@PathVariable String clientId, @Valid @RequestBody ClientDTO clientDTO) {
         return clientService.update(clientId, clientDTO);
     }
 
     @DeleteMapping("/{clientId}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteClient(@PathVariable String clientId) {
         clientService.delete(clientId);
     }
