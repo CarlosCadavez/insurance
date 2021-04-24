@@ -4,9 +4,10 @@ import br.com.csc.insurance.client.dto.ClientDTO;
 import br.com.csc.insurance.client.dto.ClientResponseDTO;
 import br.com.csc.insurance.client.entity.Client;
 import br.com.csc.insurance.client.exception.ClientAlreadyExistsException;
-import br.com.csc.insurance.client.exception.ClientNotFound;
+import br.com.csc.insurance.client.exception.ClientNotFoundException;
 import br.com.csc.insurance.client.repository.ClientRepository;
 import br.com.csc.insurance.client.validator.ClientValidator;
+import br.com.csc.insurance.exception.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,7 @@ public class ClientService {
     }
 
     public ClientResponseDTO update(String clientId, ClientDTO clientDTO) {
-        Optional.ofNullable(clientRepository.findById(clientId).orElseThrow(ClientNotFound::new));
+        Optional.ofNullable(clientRepository.findById(clientId).orElseThrow(ClientNotFoundException::new));
         Client clientToSave = convertToSave(clientDTO);
         clientToSave.setId(clientId);
         return buildClient(clientRepository.save(clientToSave));

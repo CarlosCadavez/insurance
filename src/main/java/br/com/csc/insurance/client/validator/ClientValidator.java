@@ -19,7 +19,7 @@ public class ClientValidator {
     public void canBeAdded(ClientDTO clientDTO) throws ClientAlreadyExistsException {
         List<Client> listClient = repository.findByCpf(clientDTO.getCpf());
         if (!CollectionUtils.isEmpty(listClient)) {
-            throw new ClientAlreadyExistsException(String.format("The client with cpf: %s already exists on database", clientDTO.getCpf()));
+            throw new ClientAlreadyExistsException();
         }
     }
 
