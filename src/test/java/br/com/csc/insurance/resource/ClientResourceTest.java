@@ -19,6 +19,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -32,6 +33,7 @@ class ClientResourceTest {
     private static final String A_CITY = "City to test";
     private static final String A_CPF = "61106143000";
     private static final String A_FEDERATION_UNIT = "SC";
+    private static final String A_CLIENT_ID = "6082ea439f712153abf5fa36";
 
     @Mock
     private ClientService clientService;
@@ -58,6 +60,15 @@ class ClientResourceTest {
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(convertJson.clientResponseDtoListAsJsonString(buildAListOfClients())));
+    }
+
+    @Test
+    void should_delete_user_and_return_status_code_no_content() throws Exception {
+        doNothing().when(clientService).delete(A_CLIENT_ID);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete(CLIENTS_URI + "/" + A_CLIENT_ID)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 
     @Test
