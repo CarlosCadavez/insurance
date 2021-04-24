@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/api/v1/clients")
 public class ClientResource {
 
+
     private final ClientService clientService;
 
     @GetMapping
