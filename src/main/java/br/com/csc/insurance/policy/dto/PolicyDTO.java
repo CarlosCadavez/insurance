@@ -1,6 +1,5 @@
 package br.com.csc.insurance.policy.dto;
 
-import br.com.csc.insurance.client.dto.ClientDTO;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;

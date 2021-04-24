@@ -1,6 +1,5 @@
 package br.com.csc.insurance.policy.service;
 
-import br.com.csc.insurance.client.dto.ClientResponseDTO;
 import br.com.csc.insurance.client.entity.Client;
 import br.com.csc.insurance.client.repository.ClientRepository;
 import br.com.csc.insurance.policy.dto.PolicyDTO;
