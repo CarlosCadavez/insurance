@@ -7,7 +7,7 @@ Api de seguros de veículos
 ## Rodar projeto a partir de arquivo jar
 
 * Baixar o jdk 8 
-* No diretório do projeto resource -> está o jar do projeto
+* No diretório do projeto resource -> lib está o jar do projeto
 * Executar o comando abaixo no diretorio em que o jar se encontra
 
 ```sh
