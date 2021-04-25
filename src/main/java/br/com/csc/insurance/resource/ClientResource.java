@@ -4,6 +4,7 @@ import br.com.csc.insurance.client.dto.ClientDTO;
 import br.com.csc.insurance.client.dto.ClientResponseDTO;
 import br.com.csc.insurance.client.exception.ClientAlreadyExistsException;
 import br.com.csc.insurance.client.service.ClientService;
+import br.com.csc.insurance.resource.doc.ClientResourceDoc;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/clients")
-public class ClientResource {
-
+public class ClientResource implements ClientResourceDoc {
 
     private final ClientService clientService;
 

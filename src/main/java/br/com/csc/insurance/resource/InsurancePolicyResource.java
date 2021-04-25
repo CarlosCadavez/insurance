@@ -3,6 +3,7 @@ package br.com.csc.insurance.resource;
 import br.com.csc.insurance.policy.dto.PolicyDTO;
 import br.com.csc.insurance.policy.dto.PolicyResponseDTO;
 import br.com.csc.insurance.policy.service.PolicyService;
+import br.com.csc.insurance.resource.doc.InsurancePolicyResourceDoc;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/policies")
-public class InsurancePolicyResource {
+public class InsurancePolicyResource implements InsurancePolicyResourceDoc {
 
     private final PolicyService policyService;
 
